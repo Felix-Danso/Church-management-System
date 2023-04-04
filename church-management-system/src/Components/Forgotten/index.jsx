@@ -1,5 +1,5 @@
 import React from 'react'
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 const Forgotten = () => {
   return (
@@ -9,7 +9,7 @@ const Forgotten = () => {
         <label className="ml-1" htmlFor='remember'>Remember me</label>
     </div>
     <div className='float-right text-[#0408E7] hover:underline'>
-        {/* <Link to='/forgotPassword'>Forgot password?</Link> */}
+        <Link to='/forgotPassword'>Forgot password?</Link>
     </div>
 </div>   
   )
