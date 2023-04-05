@@ -10,7 +10,6 @@ function App() {
               element={<Login/>}/>
         </Routes>
       </Router>
-     {/* <Login/> */}
     </div>
   );
 }

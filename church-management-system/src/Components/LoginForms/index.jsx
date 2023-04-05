@@ -7,7 +7,7 @@ const LoginForm = () => {
     const[userName,setUserName] = useState()
     const[email,setEmail] = useState()
   return (
-    <form className='flex flex-col items-center justify-center w-3/4 gap-5 h-96'>
+    <form className='flex flex-col items-center justify-center w-3/4 gap-5 h-96 z-10'>
          
           <div className='flex items-center justify-center h-8 border rounded-full w-7 bg-slate-200'>
              {< FaBible/>}

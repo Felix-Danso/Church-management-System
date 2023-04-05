@@ -18,7 +18,6 @@
     background-repeat: no-repeat !important;
     background-blend-mode: multiply;
     content: '';
-    z-index: 100;
     height: 100%;
     position: absolute;
     width: 100%;
@@ -26,6 +25,6 @@
 
 .blobs::after{
     background: linear-gradient(100.97deg, #6425D3 21.56%, #A259FF 84.43%);
-   z-index: 100;
+   z-index: 80;
    background-blend-mode: multiply;
 }
