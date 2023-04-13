@@ -60,7 +60,7 @@ const ForgottenPasswordForm = () => {
              {< FaBible/>}
           </div>
         <h1 className='flex justify-center text-2xl font-bold'>
-            Login</h1>
+            Forgotten Password</h1>
     <Input type="email"  name="email" value={state.email} placeholder="Enter your email" onChange={handleChange} />
     { isLoading ?
         <Loader/>
