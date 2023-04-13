@@ -6,6 +6,7 @@ import Back from '../Back'
 import { useNavigate, useParams } from 'react-router-dom'
 import { alerts } from '../../Utility/alerts'
 import { checkPassword } from '../../Utility/validator'
+import { FaBible } from 'react-icons/fa'
 
 const ResetPasswordForm = () => {
 
@@ -39,7 +40,7 @@ const ResetPasswordForm = () => {
       let item = state
       //sending api request
       try{
-        let result = await fetch(`${token}/`, {
+        let result = await fetch(`https://churchmanagement91.pythonanywhere.com/auth/reset-password/${token}/`, {
           method: "POST",
           body: JSON.stringify(item),
           headers: {
@@ -75,7 +76,12 @@ const ResetPasswordForm = () => {
 
 
   return (
-      <form onSubmit={handleSubmit} className="grid gap-5">
+      <form onSubmit={handleSubmit} className="z-10 grid gap-5">
+         <div className='flex items-center justify-center h-8 ml-40 border rounded-full w-7 bg-slate-200'>
+             {< FaBible/>}
+          </div>
+        <h1 className='flex justify-center text-2xl font-bold'>
+            ResetPassword</h1>
     <Input type="password" name="password" value={state.password} placeholder="New password" onChange={handleChange} />
     <Input type="password" name="re_password"  value={state.re_password} placeholder="Comfirm new password" onChange={handleChange} />
       { isLoading ?

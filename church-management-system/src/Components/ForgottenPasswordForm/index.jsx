@@ -4,6 +4,7 @@ import Loader from '../Loader'
 import Button from '../Button'
 import Back from '../Back'
 import { alerts } from '../../Utility/alerts'
+import { FaBible } from 'react-icons/fa'
 
 const ForgottenPasswordForm = () => {
 
@@ -26,7 +27,7 @@ const ForgottenPasswordForm = () => {
       let item = state
       setIsLoading(true);
       try{
-        let result = await fetch("", {
+        let result = await fetch("https://churchmanagement91.pythonanywhere.com/auth/forgot-password/", {
           method: "POST",
           body: JSON.stringify(item),
           headers: {
@@ -54,7 +55,12 @@ const ForgottenPasswordForm = () => {
   
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-5 z-10">
+    <form onSubmit={handleSubmit} className="z-10 grid gap-5">
+      <div className='flex items-center justify-center h-8 ml-40 border rounded-full w-7 bg-slate-200'>
+             {< FaBible/>}
+          </div>
+        <h1 className='flex justify-center text-2xl font-bold'>
+            Login</h1>
     <Input type="email"  name="email" value={state.email} placeholder="Enter your email" onChange={handleChange} />
     { isLoading ?
         <Loader/>
