@@ -1,9 +1,16 @@
 import React from 'react'
+import './index.css';
 
 const AuthenticationLayout = (props) => {
   return (
-    <div className='p-0 m-0 bg-center bg-gradient-to-tr from-[#00d5ff] via-[#3e3e45] to-[#df4ecb] ... table bg-no-repeat h-screen w-full'>
-        <div className="flex flex-col items-center justify-center float-right w-1/2 h-full h-96 bg-slate-200">
+    <div className='flex w-full h-screen p-0 m-0 bg-center bg-no-repeat blobs z-10'>
+        <div className='flex flex-col items-center w-1/2 h-full border space-y-3'>
+          <h1 className='mt-10 font-bold text-9xl'>
+            welcome
+          </h1>
+          <p>Manage Church Data from our Platform</p>
+        </div>
+        <div className="flex flex-col items-center justify-center float-right w-1/2 h-full bg-white h-96">
             {props.form}
          </div>  
     </div>
