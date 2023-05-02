@@ -6,6 +6,7 @@ const Login = () => {
   return (
     <div >
       <AuthenticationLayout
+      text ="log"
          form={<LoginForm/>}
      />
     </div>  
