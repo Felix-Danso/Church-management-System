@@ -50,15 +50,15 @@ const LoginForm = () => {
 
 
   return (
-    <form onSubmit={handleSubmit} className='z-10 flex flex-col items-center justify-center w-3/4 gap-5 h-96'>
+    <form onSubmit={handleSubmit} className='z-10 flex flex-col items-center w-full gap-5 h-96'>
          
           <div className='flex items-center justify-center h-8 border rounded-full w-7 bg-slate-200'>
              {< FaBible/>}
           </div>
-        <h1 className='flex justify-center text-2xl font-bold'>
+        <h1 className='flex justify-center text-2xl font-bold text-white'>
             Login</h1>
         <Input label="name" type="text" placeholder="Enter your UserName" value={username} onChange={(event)=>setUsername(event.target.value)}/>
-        <Input label="Password" type="text" placeholder="Enter your password" value={password} onChange={(event)=>setPassword(event.target.value)}/>
+        <Input label="Password" type="password" placeholder="Enter your password" value={password} onChange={(event)=>setPassword(event.target.value)}/>
         <Forgotten/>
         { isLoading?
           <Loader/>

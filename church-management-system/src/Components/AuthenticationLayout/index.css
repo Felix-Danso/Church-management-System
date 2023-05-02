@@ -1,30 +1,79 @@
+.form{
+  background-image: 
+              url(../../Assets/Ellipse\ 1.svg);
+  background-position: 
+                      0rem 0rem;
+  background-repeat: no-repeat !important;
+  background-blend-mode: multiply;
+  content: '';
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
 .blobs{
-    background: linear-gradient(100.97deg,  #e2e8f0 21.56%,  #e2e8f0 84.43%);
-    background-blend-mode: multiply;
-    z-index: 80;
+ background-image:
+        url(../../Assets/Ellipse\ 2.svg);
+background-position:
+       9rem 6rem;
+       background-repeat: no-repeat !important;
+       background-blend-mode: multiply;
+       content: '';
+       height: 100%;
+       position: absolute;
+       width: 100%;    
 }
 
-
-.blobs::before{
-    background: linear-gradient(100.97deg, #6425D3 21.56%, #A259FF 84.43%);
-    background-image:  
-                url(../../Assets/Ellipse\ 8.svg),
-                url(../../Assets/Ellipse\ 6.svg),
-                url(../../Assets/Ellipse\ 7.svg);
-    background-position: 
-                        8rem 3rem,
-                        1rem 13rem,
-                        10rem 7rem;
-    background-repeat: no-repeat !important;
-    background-blend-mode: multiply;
-    content: '';
-    height: 100%;
-    position: absolute;
-    width: 100%;
+.blob{
+  background-image:
+     url(../../Assets/Subtract\.svg);
+   background-position:
+              right top;
+          background-repeat: no-repeat !important;
+          background-blend-mode: multiply;
+          content: '';
+          /* float:right; */
+          height: 100%;
+          position: absolute;
+          width: 100%;    
 }
 
-.blobs::after{
-    background: linear-gradient(100.97deg, #6425D3 21.56%, #A259FF 84.43%);
-   z-index: 80;
-   background-blend-mode: multiply;
+.poly{
+  background-image:
+   url(../../Assets/Polygon\ 3.svg);
+  background-position:
+  right bottom; 
+background-repeat: no-repeat !important;
+background-blend-mode: multiply;
+content: '';
+height: 100%;
+position: absolute;
+width: 100%;    
 }
+
+.poly1{
+  background-image:
+   url(../../Assets/Polygon\ 2.svg);
+  background-position:
+    right bottom; 
+background-repeat: no-repeat !important;
+background-blend-mode: multiply;
+content: '';
+height: 100%;
+position: absolute;
+width: 100%;    
+}
+
+.poly2{
+  background-image:
+   url(../../Assets/Polygon\ 1.svg);
+  background-position:
+      right bottom -2rem;
+background-repeat: no-repeat !important;
+background-blend-mode: multiply;
+content: '';
+height: 100%;
+position: absolute;
+width: 100%;    
+}
+
