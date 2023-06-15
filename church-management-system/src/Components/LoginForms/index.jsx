@@ -18,7 +18,6 @@ const LoginForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     let data = {username, password}
-    console.log(data)
     setIsLoading(true);
     try {
       //endpoint for user login
