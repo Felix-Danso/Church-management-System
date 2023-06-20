@@ -2,9 +2,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import { BsThreeDots} from 'react-icons/bs';
 import {GoPrimitiveDot} from 'react-icons/go';
 import { useDispatch } from 'react-redux';
-import { fetchAllMembers, fetchMember } from '../Members/MembersSlice';
+// import { fetchAllMembers, fetchMember } from '../Members/MembersSlice';
+
 
 const MembersTable = (props) => {
+    console.log('hgj',props.members)
     const dispatch = useDispatch();
     const wrapperRef = useRef(null);
 
@@ -58,45 +60,40 @@ const MembersTable = (props) => {
                                 </tr>
                             </thead>
                             <tbody className='divide-y divide-gray-200'>
-                                {props.details.map((detail, index) => (
-                                    <tr key={detail.id} className='border-b border-gray_200'>
+                                {props.members.map((member, index) => {
+                                    // console.log(Members)
+                                    return(
+                                    <tr key={member.id} className='border-b border-gray_200'>
                                         <td
                                             onClick={" "}
                                             className='px-6 py-4 cursor-pointer whitespace-nowrap'
                                         >
                                             <div className='flex items-center'>
-                                                {/* <div className='flex-shrink-0 w-10 h-10'>
-                                                    <img
-                                                        className='w-10 h-10 rounded-full'
-                                                        src={detail?.profile_picture ? detail?.profile_picture : createImageFromInitialsName(600, detail.full_name, getRandomColor())}
-                                                        alt=''
-                                                    />
-                                                </div> */}
                                                 <div className='ml-4'>
                                                     <div className='text-sm text-gray_900'>
-                                                        {detail.full_name}
+                                                        {member.full_name}
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className='px-6 py-4 whitespace-nowrap'>
                                             <div className='text-sm text-gray_500'>
-                                                {detail.tithe}
+                                                {member.tithe}
                                             </div>
                                         </td>
                                         <td className='px-6 py-4 text-sm text-gray_500 whitespace-nowrap'>
-                                            {detail.department}
+                                            {member.departmen_id}
                                         </td>
                                         <td className='px-6 py-4 text-sm text-gray_500 whitespace-nowrap'>
-                                            {detail.contact}
+                                            {member.contact}
                                         </td>
                                         <td className='px-6 py-4 text-sm text-gray_500 whitespace-nowrap'>
-                                            {detail.date_joined}
+                                            {member.created_at}
                                         </td>
                                         <td className='px-6 py-4 whitespace-nowrap'>
                                             <span
                                                 className={`inline-flex items-center gap-x-1 px-4 py-2 text-xs leading-5 ${
-                                                    detail.status === 'Active'
+                                                    member.status === 'Active'
                                                         ? 'text-[#027A48] bg-[#ECFDF3]'
                                                         : 'text-[#B42318] bg-[#FEF3F2]'
                                                 } rounded-full`}
@@ -105,7 +102,7 @@ const MembersTable = (props) => {
                                                     <GoPrimitiveDot />
                                                 </span>
                                                 <span>
-                                                {detail.status}
+                                                {member.status}
                                                 </span>
                                             </span>
                                         </td>
@@ -113,10 +110,10 @@ const MembersTable = (props) => {
                                             <div className='cursor-pointer'>
                                                 <BsThreeDots
                                                     color='#344054'
-                                                    onClick={() => menuTrigger(detail.id)}
+                                                    onClick={() => menuTrigger(member.id)}
                                                 />
                                             </div>
-                                            {menuOpen === detail.id ? (
+                                            {menuOpen === member.id ? (
                                                 <ul
                                                     ref={wrapperRef}
                                                     className='z-[100] absolute w-40 -translate-x-40 space-y-2 text-gray_600 bg-[white] border-[#F2F4F7] rounded-lg shadow-lg'
@@ -152,7 +149,8 @@ const MembersTable = (props) => {
                                                 )} 
                                         </td>
                                       </tr>
-                                ))}
+                                      )
+                                })}
                             </tbody>
                         </table>
                     </div>

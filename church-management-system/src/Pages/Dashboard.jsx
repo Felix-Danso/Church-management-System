@@ -41,11 +41,9 @@ const Dashboard = () => {
             </div>
             <Routes>
                 <Route
-                    path='/'
+                    path='/members'
                     element={
-                        <>
                         <Members/>
-                        </>   
                     }
                 />
             </Routes>

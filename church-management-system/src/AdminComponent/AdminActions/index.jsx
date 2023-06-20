@@ -1,11 +1,12 @@
 import React from 'react'
 import SearchInput from '../SearchInput';
 import Modal from 'react-modal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { customStyles } from '../../Misc/modelStyle';
-import { store } from '../../app/store';
+import { setSearchField } from '../Members/MembersSlice';
 
 const AdminActions = () => {
+    const dispatch = useDispatch();
     const searchField = useSelector((state) => state.adminActions.searchField);
     // const isModalOpen = useSelector((state) => state.adminDoctors.isModalOpen);
     // console.log(store.getState().adminActions)
@@ -16,7 +17,7 @@ const AdminActions = () => {
         <SearchInput
             placeholder='Search doctor by name or email'
             value={searchField}
-            onChange={""}
+            onChange={(event) => dispatch(setSearchField(event.target.value))}
         />
         </div>
        <div>
