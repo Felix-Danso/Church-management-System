@@ -11,6 +11,7 @@ const Profile = (props) => {
     const dispatch = useDispatch();
     
     const user = useSelector((state) => state.authenticated.user)
+    // const user = JSON.parse(localStorage.getItem('user'))
     const token = JSON.parse(localStorage.getItem('token'));
     const status = useSelector((state) => state.authenticated.status);
     const color = useSelector((state) => state.authenticated.color)
@@ -41,27 +42,6 @@ const Profile = (props) => {
                         className='absolute right-0 w-56 mt-2 space-y-2 text-gray_600 bg-[white] border-[#F2F4F7] rounded-lg shadow-lg'
                         aria-label='submenu'
                     >
-                        {/* <li className='flex p-2 text-sm border-b h-14 border-gray_200'>
-                            <div>
-                                <img
-                                    className='object-cover w-8 h-8 ml-4 rounded-full'
-                                    src={user?.profile_picture ? user?.profile_picture : createImageFromInitials(600, color)}
-                                    alt=''
-                                    aria-hidden='true'
-                                />
-                                <span
-                                    aria-hidden='true'
-                                    className='bottom-0 right-0 inline-block w-3 h-3 transform translate-x-10 -translate-y-3 bg-[green] border-2 border-[white] rounded-full'
-                                ></span>
-                            </div>
-                            <div className='grid items-center ml-4 text-left'>
-                                <span className='font-semibold text-gray_700'>
-                                    {user?.role__name === 'Patient'
-                                        ? user?.first_name + ' ' + user?.last_name
-                                        : user?.full_name}
-                                </span>
-                            </div>
-                        </li> */}
                         {user?.role__name === 'Super Admin' ? (
                             <></>
                         ) : (

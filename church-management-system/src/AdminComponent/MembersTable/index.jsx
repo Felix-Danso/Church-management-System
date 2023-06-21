@@ -1,15 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { BsThreeDots} from 'react-icons/bs';
 import {GoPrimitiveDot} from 'react-icons/go';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import CustomizedDialogs from '../ConfirmationModal';
+import 
+    { 
+     activateMember,
+     deactivateMember, 
+     deleteMember,
+      setActivateModal, 
+      setDeactivateModal, 
+      setDeleteModal 
+    }
+ from '../Members/MembersSlice';
 // import { fetchAllMembers, fetchMember } from '../Members/MembersSlice';
 
 
-const MembersTable = (props) => {
-    console.log('hgj',props.members)
+const MembersTable = (props) => { 
     const dispatch = useDispatch();
     const wrapperRef = useRef(null);
-
+    const deleteModal = useSelector((state) => state.adminMembers.deleteModal);
+    const activateModal = useSelector((state) => state.adminMembers.activateModal);
+    const deactivateModal = useSelector((state) => state.adminMembers.deactivateModal);
+    const deleteStatus = useSelector((state) => state.adminMembers.deleteStatus);
+    const activateStatus = useSelector((state) => state.adminMembers.activateStatus);
+    const deactivateStatus = useSelector((state) => state.adminMembers.deactivateStatus);
        //function to display sub menu of doctors
        const menuTrigger = (id) => {
         if (menuOpen === id) {
@@ -60,8 +75,7 @@ const MembersTable = (props) => {
                                 </tr>
                             </thead>
                             <tbody className='divide-y divide-gray-200'>
-                                {props.members.map((member, index) => {
-                                    // console.log(Members)
+                                {props.members.map((member) => {
                                     return(
                                     <tr key={member.id} className='border-b border-gray_200'>
                                         <td
@@ -70,7 +84,7 @@ const MembersTable = (props) => {
                                         >
                                             <div className='flex items-center'>
                                                 <div className='ml-4'>
-                                                    <div className='text-sm text-gray_900'>
+                                                    <div className='text-sm text-gray_900 font-bold`'>
                                                         {member.full_name}
                                                     </div>
                                                 </div>
@@ -78,11 +92,11 @@ const MembersTable = (props) => {
                                         </td>
                                         <td className='px-6 py-4 whitespace-nowrap'>
                                             <div className='text-sm text-gray_500'>
-                                                {member.tithe}
+                                                {member.is_paid_tithes}
                                             </div>
                                         </td>
                                         <td className='px-6 py-4 text-sm text-gray_500 whitespace-nowrap'>
-                                            {member.departmen_id}
+                                            {member.department_id}
                                         </td>
                                         <td className='px-6 py-4 text-sm text-gray_500 whitespace-nowrap'>
                                             {member.contact}
@@ -120,27 +134,36 @@ const MembersTable = (props) => {
                                                     onBlur={() => setMenuOpen(null)}
                                                 >
                                                     <li
-                                                        onClick={""}
+                                                        onClick={() =>{
+                                                            dispatch(setActivateModal(member.id))
+                                                            setMenuOpen(false)
+                                                        }}
                                                         className='flex ml-3 border-b cursor-pointer border-gray_200 text-gray_700'
                                                     >
                                                         <div className='inline-flex items-center w-full px-2 py-1 text-sm transition-colors duration-150 rounded-md border-gray2'>
-                                                            Activate user
+                                                            Activate member
                                                         </div>
                                                     </li>
                                                     <li
-                                                        onClick={""}
+                                                        onClick={() => {
+                                                            dispatch(setDeactivateModal(member.id));
+                                                            setMenuOpen(false);
+                                                        }}
                                                         className='flex ml-3 border-b cursor-pointer border-gray_200 text-gray_700'
                                                     >
                                                         <div className='inline-flex items-center w-full px-2 py-1 text-sm transition-colors duration-150 rounded-md border-gray2'>
-                                                            Deactivate user
+                                                            Deactivate member
                                                         </div>
                                                     </li>
                                                     <li
-                                                        onClick={""}
+                                                        onClick={() => {
+                                                            dispatch(setDeleteModal(member.id));
+                                                            setMenuOpen(false);
+                                                        }}
                                                         className='flex ml-3 border-b cursor-pointer border-gray_200 text-gray_700'
                                                     >
                                                         <div className='inline-flex items-center w-full px-2 py-1 text-sm transition-colors duration-150 rounded-md border-gray2'>
-                                                            Delete user
+                                                            Edit
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -148,6 +171,90 @@ const MembersTable = (props) => {
                                                 <></> 
                                                 )} 
                                         </td>
+                                        {deleteModal === member.id ? (
+                                            <div>
+                                                <CustomizedDialogs
+                                                    openModal={deleteModal}
+                                                    isLoading={deleteStatus === 'loading'}
+                                                    title='Delete Member?'
+                                                    onClose={() => dispatch(setDeleteModal(null))}
+                                                    accept='Yes, delete'
+                                                    decline='No, keep it'
+                                                    description={
+                                                        <div
+                                                            dangerouslySetInnerHTML={{
+                                                                __html: `<span>Are you sure you want to permanently delete </span><span class="font-bold">${member.full_name}</span>?`,
+                                                            }}
+                                                        />
+                                                    }
+                                                    onClickAccept={() =>
+                                                        dispatch(deleteMember(member.id))
+                                                    }
+                                                    onClickDecline={() => {
+                                                        dispatch(setDeleteModal(null));
+                                                    }}
+                                                />
+                                            </div>
+                                        ) : (
+                                            <></>
+                                        )}
+                                        {activateModal === member.id ? (
+                                            <div>
+                                                <CustomizedDialogs
+                                                    openModal={activateModal}
+                                                    isLoading={activateStatus === 'loading'}
+                                                    title='Activate Member?'
+                                                    onClose={() => dispatch(setActivateModal(null))}
+                                                    accept='Yes, activate'
+                                                    decline='Cancel'
+                                                    description={
+                                                        <div
+                                                            dangerouslySetInnerHTML={{
+                                                                __html: `<span>Activating <span class="font-bold">${member.full_name}</span> means they will be able to login.<br> Are you sure of this?</span>`,
+                                                            }}
+                                                        />
+                                                    }
+                                                    onClickAccept={() =>
+                                                        dispatch(activateMember(member.email))
+                                                    }
+                                                    onClickDecline={() =>
+                                                        dispatch(setActivateModal(null))
+                                                    }
+                                                />
+                                            </div>
+                                        ) : (
+                                            <></>
+                                        )}
+
+                                        {deactivateModal === member.id ? (
+                                            <div>
+                                                <CustomizedDialogs
+                                                    openModal={deactivateModal}
+                                                    isLoading={deactivateStatus === 'loading'}
+                                                    title='Deactivate Member?'
+                                                    onClose={() =>
+                                                        dispatch(setDeactivateModal(null))
+                                                    }
+                                                    accept='Yes, deactivate'
+                                                    decline='Cancel'
+                                                    description={
+                                                        <div
+                                                            dangerouslySetInnerHTML={{
+                                                                __html: `<span>Deactivating <span class="font-bold">${member.full_name}</span> means they won't be able to login.<br> Are you sure of this?</span>`,
+                                                            }}
+                                                        />
+                                                    }
+                                                    onClickAccept={() =>
+                                                        dispatch(deactivateMember(member.email))
+                                                    }
+                                                    onClickDecline={() =>
+                                                        dispatch(setDeactivateModal(null))
+                                                    }
+                                                />
+                                            </div>
+                                        ) : (
+                                            <></>
+                                        )}
                                       </tr>
                                       )
                                 })}

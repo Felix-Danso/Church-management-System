@@ -7,6 +7,6 @@ export const store = configureStore({
     reducer: {
         adminActions: AdminActionsReducer,
         authenticated: authenticatedReducer,
-        members :adminMembersReducer,
+        adminMembers :adminMembersReducer,
     },
 });

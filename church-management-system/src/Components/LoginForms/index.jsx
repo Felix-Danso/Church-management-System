@@ -31,9 +31,10 @@ const LoginForm = () => {
         body: JSON.stringify(data),
       });
       let resultJson = await result.json();
+      console.log(resultJson)
       if(result.status === 200){
         localStorage.setItem('token', JSON.stringify(resultJson['data']))
-        localStorage.setItem('user', JSON.stringify(resultJson['admin']))
+        localStorage.setItem('user', JSON.stringify(resultJson['user']))
         alerts("success", resultJson['detail'])
       navigate("/dashboard")
       }

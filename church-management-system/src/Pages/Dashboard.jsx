@@ -9,8 +9,10 @@ import Tithe from '../Assets/Tithe.svg'
 import Departments from '../Assets/Departments.svg'
 import { Route, Routes } from 'react-router'
 import Members from '../AdminComponent/Members'
+import { useSelector } from 'react-redux'
 
 const Dashboard = () => {
+    const count = useSelector((state) => state.adminMembers.count)
     const[status,] = useState()
 
   return (
@@ -22,7 +24,7 @@ const Dashboard = () => {
       <div className='grid grid-cols-1 gap-12 pt-8 ml-10 mr-10 md:grid-cols-2 lg:grid-cols-3'>
                 <Card
                     title='Members'
-                    number={status === 'loading' ? 'loading...' : ""}
+                    number={status === 'loading' ? 'loading...' : count}
                     image={members}
                     color='bg-[#66B6FF33]'
                 />
@@ -41,12 +43,13 @@ const Dashboard = () => {
             </div>
             <Routes>
                 <Route
-                    path='/members'
+                    path='/'
                     element={
                         <Members/>
                     }
                 />
             </Routes>
+            {/* <Members/> */}
     </div>
   )
 }
