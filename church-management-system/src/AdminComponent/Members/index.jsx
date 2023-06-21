@@ -7,7 +7,7 @@ import Pagination from '../Pagination'
 
 const Members = () => {
  const dispatch = useDispatch()
- const members = useSelector((state) => state.adminMembers.member)
+ const members = useSelector((state) => state.adminMembers.members)
  const status = useSelector((state) => state.adminMembers.status);
  const searchField = useSelector((state) => state.adminMembers.searchField)
  const [service, setService] = useState("");
@@ -23,7 +23,7 @@ const Members = () => {
  const filteredData = filterArraySelect(
   members,
   searchField,
-  { full_name: '', email: '', service__speciality: '' },
+  { full_name: '' },
   service,
 );
 
@@ -35,8 +35,8 @@ const Members = () => {
   const pageNumbers = [...Array(nPages + 1).keys()].slice(1);
 
   useEffect(() =>{
-    dispatch(fetchAllMembers())
-  },[dispatch])
+    dispatch(fetchAllMembers(currentPage))
+  },[dispatch,currentPage])
 
   return (
     <div>
