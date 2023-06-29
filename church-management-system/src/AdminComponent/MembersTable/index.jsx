@@ -10,7 +10,7 @@ import
      deleteMember,
       setActivateModal, 
       setDeactivateModal, 
-      setDeleteModal 
+      setEditModal 
     }
  from '../Members/MembersSlice';
 // import { fetchAllMembers, fetchMember } from '../Members/MembersSlice';
@@ -19,10 +19,10 @@ import
 const MembersTable = (props) => { 
     const dispatch = useDispatch();
     const wrapperRef = useRef(null);
-    const deleteModal = useSelector((state) => state.adminMembers.deleteModal);
+    const editModal = useSelector((state) => state.adminMembers.editModal);
     const activateModal = useSelector((state) => state.adminMembers.activateModal);
     const deactivateModal = useSelector((state) => state.adminMembers.deactivateModal);
-    const deleteStatus = useSelector((state) => state.adminMembers.deleteStatus);
+    const editStatus = useSelector((state) => state.adminMembers.editStatus);
     const activateStatus = useSelector((state) => state.adminMembers.activateStatus);
     const deactivateStatus = useSelector((state) => state.adminMembers.deactivateStatus);
        //function to display sub menu of doctors
@@ -92,11 +92,11 @@ const MembersTable = (props) => {
                                         </td>
                                         <td className='px-6 py-4 whitespace-nowrap'>
                                             <div className='text-sm text-gray_500'>
-                                                {member.is_paid_tithes}
+                                                {member.tithes__amount}
                                             </div>
                                         </td>
                                         <td className='px-6 py-4 text-sm text-gray_500 whitespace-nowrap'>
-                                            {member.department_id}
+                                            {member.department__name}
                                         </td>
                                         <td className='px-6 py-4 text-sm text-gray_500 whitespace-nowrap'>
                                             {member.contact}
@@ -157,7 +157,7 @@ const MembersTable = (props) => {
                                                     </li>
                                                     <li
                                                         onClick={() => {
-                                                            dispatch(setDeleteModal(member.id));
+                                                            dispatch(setEditModal(member.id));
                                                             setMenuOpen(false);
                                                         }}
                                                         className='flex ml-3 border-b cursor-pointer border-gray_200 text-gray_700'
@@ -171,14 +171,14 @@ const MembersTable = (props) => {
                                                 <></> 
                                                 )} 
                                         </td>
-                                        {deleteModal === member.id ? (
+                                        {editModal === member.id ? (
                                             <div>
                                                 <CustomizedDialogs
-                                                    openModal={deleteModal}
-                                                    isLoading={deleteStatus === 'loading'}
-                                                    title='Delete Member?'
-                                                    onClose={() => dispatch(setDeleteModal(null))}
-                                                    accept='Yes, delete'
+                                                    openModal={editModal}
+                                                    isLoading={editStatus === 'loading'}
+                                                    title='Edit Member?'
+                                                    onClose={() => dispatch(setEditModal(null))}
+                                                    accept='Yes, edit'
                                                     decline='No, keep it'
                                                     description={
                                                         <div
@@ -191,7 +191,7 @@ const MembersTable = (props) => {
                                                         dispatch(deleteMember(member.id))
                                                     }
                                                     onClickDecline={() => {
-                                                        dispatch(setDeleteModal(null));
+                                                        dispatch(setEditModal(null));
                                                     }}
                                                 />
                                             </div>
