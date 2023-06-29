@@ -12,10 +12,9 @@ const initialState = {
     deleteStatus: 'idle',
     activateStatus: 'idle',
     deactivateStatus: 'idle',
-    deleteModal: null,
+    editModal: null,
     activateModal: null,
     deactivateModal: null,
-    count:'',
 };
 
 export const fetchAllMembers = createAsyncThunk('fetchmembers/admin', async (id, { dispatch }) => {
@@ -29,15 +28,14 @@ export const fetchAllMembers = createAsyncThunk('fetchmembers/admin', async (id,
     }
 });
 
-// export const fetchMember = createAsyncThunk('fetchMember/admin', async (id, { dispatch }) => {
-//     dispatch(selectedMember(null));
-//     try {
-//         const response = await axiosPrivate.get(`/all-members/${id}`);
-//         dispatch(selectedMember(response.data.data[0]));
-//     } catch (error) {
-//         alerts('error', error?.response.data.detail || error?.message);
-//     }
-// });
+export const addNewMember = createAsyncThunk('addNewMember/admin', async (id, { dispatch }) => {
+    try {
+        const response = await axiosPrivate.post(`/dashboard/add-church-member/`);
+        alerts('success', response.data.detail);
+    } catch (error) {
+        alerts('error', error?.response.data.detail || error?.message);
+    }
+});
 
 export const deleteMember = createAsyncThunk('deleteMember/admin', async (id, { dispatch }) => {
     const member_id = id;
@@ -46,7 +44,7 @@ export const deleteMember = createAsyncThunk('deleteMember/admin', async (id, { 
             data: { member_id },
         });
         dispatch(updateMembers(member_id));
-        dispatch(setDeleteModal(null));
+        dispatch(setEditModal(null));
         alerts('success', response.data.detail);
     } catch (error) {
         alerts('error', error?.response.data.detail || error?.message);
@@ -69,10 +67,10 @@ export const activateMember = createAsyncThunk(
 
 export const deactivateMember = createAsyncThunk(
     'deactivateDoctor/admin',
-    async (email, { dispatch }) => {
+    async (id, { dispatch }) => {
         try {
-            const response = await axiosPrivate.post(`/dashboard/deactivate-church-member/`, { email });
-            dispatch(setStatus({ email: email, status: 'Inactive' }));
+            const response = await axiosPrivate.post('/dashboard/deactivate-church-member/');
+            dispatch(setStatus({ church_member_id:id , status: 'Inactive' }));
             dispatch(setDeactivateModal(null));
             alerts('success', response.data.detail);
         } catch (error) {
@@ -87,9 +85,6 @@ export const adminMembersSlice = createSlice({
     reducers: {
        setMembers: (state, action) => {
             state.members = action.payload;
-        },
-        setCount:(state, action) => {
-            state.count = action.payload
         },
         selectedMember: (state, action) => {
             state.selectedMember = action.payload;
@@ -108,7 +103,7 @@ export const adminMembersSlice = createSlice({
         //     doctorsEmails.splice(action.payload, 1);
         //     state.inviteList = doctorsEmails;
         // },
-        setDeleteModal: (state, action) => {
+        setEditModal: (state, action) => {
             state.deleteModal = action.payload;
         },
         setActivateModal: (state, action) => {
@@ -137,15 +132,15 @@ export const adminMembersSlice = createSlice({
             .addCase(fetchAllMembers.rejected, (state, action) => {
                 state.status = 'failed';
             })
-            // .addCase(fetchMember.pending, (state, action) => {
-            //     state.selectedDoctorStatus = 'loading';
-            // })
-            // .addCase(fetchMember.fulfilled, (state, action) => {
-            //     state.selectedDoctorStatus = 'succeeded';
-            // })
-            // .addCase(fetchMember.rejected, (state, action) => {
-            //     state.selectedDoctorStatus = 'failed';
-            // })
+            .addCase(addNewMember.pending, (state, action) => {
+                state.selectedDoctorStatus = 'loading';
+            })
+            .addCase(addNewMember.fulfilled, (state, action) => {
+                state.selectedDoctorStatus = 'succeeded';
+            })
+            .addCase(addNewMember.rejected, (state, action) => {
+                state.selectedDoctorStatus = 'failed';
+            })
             .addCase(deleteMember.pending, (state, action) => {
                 state.deleteStatus = 'loading';
             })
@@ -187,7 +182,7 @@ export const {
     setInviteList,
     removeDoctor,
     clearInviteList,
-    setDeleteModal,
+    setEditModal,
     setActivateModal,
     setDeactivateModal,
     updateMembers,

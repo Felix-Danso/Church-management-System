@@ -11,8 +11,11 @@ import { Route, Routes } from 'react-router'
 import Members from '../AdminComponent/Members'
 import { useSelector } from 'react-redux'
 
+
 const Dashboard = () => {
-    const count = useSelector((state) => state.adminMembers.count)
+    // const dispatch = useDispatch()
+    // const count = useSelector((state) => state.totalChurchMember.count)
+    const total_members = useSelector((state) => state.cards.total_members)
     const[status,] = useState()
 
   return (
@@ -24,7 +27,7 @@ const Dashboard = () => {
       <div className='grid grid-cols-1 gap-12 pt-8 ml-10 mr-10 md:grid-cols-2 lg:grid-cols-3'>
                 <Card
                     title='Members'
-                    number={status === 'loading' ? 'loading...' : count}
+                    number={status === 'loading' ? 'loading...': total_members}
                     image={members}
                     color='bg-[#66B6FF33]'
                 />

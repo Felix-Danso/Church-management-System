@@ -5,8 +5,9 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import Loader from '../../Misc/Loader';
+// import Loader from '../../Misc/';
 import { GrClose } from 'react-icons/gr';
+import Loader from '../../Misc/Loader';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -62,22 +63,22 @@ export default function CustomizedDialogs(props) {
                     <div className="flex justify-between">
                     <span className='text-[#101828] text-lg font-semibold'>{props.title}</span>
                     <span 
-                        className='text-gray_700 hover:text-primary text-base font-semibold cursor-pointer'
+                        className='text-base font-semibold cursor-pointer text-gray_700 hover:text-primary'
                         onClick={props.onClickDecline}
                     ><GrClose/></span>
                     </div>
                 </BootstrapDialogTitle>
-                <div className='mr-4 ml-4 text-gray_500 text-sm'>
+                <div className='ml-4 mr-4 text-sm text-gray_500'>
                     <span>{props.description}</span>
                 </div>
-                <div className='mr-4 ml-4 mt-8 mb-7 flex gap-3 self-center'>
+                <div className='flex self-center gap-3 mt-8 ml-4 mr-4 mb-7'>
                     {props.isLoading ? (
                         <Loader />
                     ) : (
                         <>
                             <button
                                 onClick={props.onClickDecline}
-                                className='w-40 h-12 rounded-lg text-gray_700 border border-gray_300 '
+                                className='w-40 h-12 border rounded-lg text-gray_700 border-gray_300 '
                             >
                                 {props.decline}
                             </button>
