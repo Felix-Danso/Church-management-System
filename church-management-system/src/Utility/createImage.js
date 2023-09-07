@@ -1,18 +1,7 @@
 import { getInitials } from "./getInitials";
 
 export const createImageFromInitials = (size, color) => {
-    const role = JSON.parse(localStorage.getItem("user"))?.role__name;
-    const user = JSON.parse(localStorage.getItem('user')) 
-    let name;
-    if(role === "Patient") {
-        name = user?.first_name + " " + user?.last_name
-    }
-    else{
-        name = user?.full_name
-    }
-    // if (name === ) return;
-    // name=getInitials(name)
-
+    const name=getInitials(JSON.parse(localStorage.getItem('user')).username)
     const canvas=document.createElement('canvas')
     const context=canvas.getContext('2d')
     canvas.width=canvas.height=size
