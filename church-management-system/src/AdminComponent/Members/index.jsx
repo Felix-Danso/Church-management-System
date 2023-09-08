@@ -4,7 +4,8 @@ import {fetchAllMembers, setSearchMembers} from './MembersSlice'
 import Pagination from '../Pagination'
 import SearchInput from "../SearchInput";
 import TitleAndCtas from "../TitleAndCtas";
-import MembersTable from '../Table';
+import MembersTable from '../Table/membersTable';
+// import MembersTable from '../../AdminComponent/';
 
 
 const Members = () => {
