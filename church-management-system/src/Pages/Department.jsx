@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import MembersTable from "../AdminComponent/MembersTable";
+import MembersTable from "../AdminComponent/Table";
 import {fetchAllMembers, setSearchMembers} from "../AdminComponent/Members/MembersSlice";
 import {fetchAllDepartments} from "../Slices/departmentSlice";
 import DepartmentsTable from "../AdminComponent/departments";

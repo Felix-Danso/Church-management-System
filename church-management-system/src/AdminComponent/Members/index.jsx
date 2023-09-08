@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import MembersTable from '../MembersTable'
 import { useDispatch, useSelector } from 'react-redux'
 import {fetchAllMembers, setSearchMembers} from './MembersSlice'
 import Pagination from '../Pagination'
 import SearchInput from "../SearchInput";
 import TitleAndCtas from "../TitleAndCtas";
+import MembersTable from '../Table';
+
 
 const Members = () => {
  const dispatch = useDispatch()
