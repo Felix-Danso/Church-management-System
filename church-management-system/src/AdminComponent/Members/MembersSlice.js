@@ -4,9 +4,10 @@ import { axiosPrivate } from '../../Utility/axios';
 
 const initialState = {
     members: [],
+    totalMembers: 0,
     status: 'idle',
     selectedMember: null,
-    selectedDoctorStatus: 'idle',
+    addMemberStatus: 'idle',
     searchField: '',
     isModalOpen: false,
     deleteStatus: 'idle',
@@ -15,22 +16,38 @@ const initialState = {
     editModal: null,
     activateModal: null,
     deactivateModal: null,
+    editMember: {},
+    editMemberStatus: 'idle',
+    isEditModalOpen: false
 };
 
-export const fetchAllMembers = createAsyncThunk('fetchmembers/admin', async (id, { dispatch }) => {
+export const fetchAllMembers = createAsyncThunk('fetchMembers/admin', async (params, { dispatch }) => {
     try {
-        const response = await axiosPrivate.get(`/dashboard/all-members/${1}`);
+        const response = await axiosPrivate.post(`/dashboard/all-members/${params.currentPage}/`, {search_param: params.search});
+        dispatch(updateTotalMembers(response.data.church_members))
         dispatch(setMembers(response.data.data));
         dispatch(setCount(response.data.count));
-        return;
     } catch (error) {
         alerts('error', error?.response.data.detail || error?.message);
     }
 });
 
-export const addNewMember = createAsyncThunk('addNewMember/admin', async (id, { dispatch }) => {
+export const addNewMember = createAsyncThunk('addNewMember/admin', async (newMemberInfo, { dispatch }) => {
     try {
-        const response = await axiosPrivate.post(`/dashboard/add-church-member/`);
+        const response = await axiosPrivate.post(`/dashboard/add-church-member/`, newMemberInfo);
+        dispatch(setIsModalOpen())
+        dispatch(fetchAllMembers())
+        alerts('success', response.data.detail);
+    } catch (error) {
+        alerts('error', error?.response.data.detail || error?.message);
+    }
+});
+
+export const editMember = createAsyncThunk('editMember/admin', async (memberInfo, { dispatch }) => {
+    try {
+        const response = await axiosPrivate.post(`/dashboard/edit-church-member/`, memberInfo);
+        dispatch(setIsModalOpen())
+        dispatch(fetchAllMembers())
         alerts('success', response.data.detail);
     } catch (error) {
         alerts('error', error?.response.data.detail || error?.message);
@@ -53,10 +70,11 @@ export const deleteMember = createAsyncThunk('deleteMember/admin', async (id, { 
 
 export const activateMember = createAsyncThunk(
     'activateMember/admin',
-    async (email, { dispatch }) => {
+    async (id, { dispatch }) => {
         try {
-            const response = await axiosPrivate.post(`/dashboard//`, { email });
-            dispatch(setStatus({ email: email, status: 'Active' }));
+            const response = await axiosPrivate.post(`/dashboard/activate-church-member/`,
+                { church_member_id: id });
+            dispatch(setStatus({ id: id, status: 'Active' }));
             dispatch(setActivateModal(null));
             alerts('success', response.data.detail);
         } catch (error) {
@@ -66,11 +84,12 @@ export const activateMember = createAsyncThunk(
 );
 
 export const deactivateMember = createAsyncThunk(
-    'deactivateDoctor/admin',
+    'deactivateMember/admin',
     async (id, { dispatch }) => {
         try {
-            const response = await axiosPrivate.post('/dashboard/deactivate-church-member/');
-            dispatch(setStatus({ church_member_id:id , status: 'Inactive' }));
+            const response = await axiosPrivate.post('/dashboard/deactivate-church-member/',
+                {church_member_id: id});
+            dispatch(setStatus({ id: id , status: 'Inactive' }));
             dispatch(setDeactivateModal(null));
             alerts('success', response.data.detail);
         } catch (error) {
@@ -98,13 +117,11 @@ export const adminMembersSlice = createSlice({
         setIsModalOpen: (state, action) => {
             state.isModalOpen = !state.isModalOpen;
         },
-        // removeDoctor: (state, action) => {
-        //     const doctorsEmails = [...state.inviteList];
-        //     doctorsEmails.splice(action.payload, 1);
-        //     state.inviteList = doctorsEmails;
-        // },
         setEditModal: (state, action) => {
-            state.deleteModal = action.payload;
+            state.isEditModalOpen = !state.isEditModalOpen;
+        },
+        setEditMember: (state, action) => {
+           state.editMember = action.payload
         },
         setActivateModal: (state, action) => {
             state.activateModal = action.payload;
@@ -116,10 +133,16 @@ export const adminMembersSlice = createSlice({
             state.members = state.members.filter((member) => member.id !== action.payload);
         },
         setStatus: (state, action) => {
-            const { email, status } = action.payload;
-            const findDoctor = state.doctors.find((doctor) => doctor.email === email);
-            findDoctor.status = status;
+            const { id, status } = action.payload;
+            const findMember = state.members.find((member) => member.id === id);
+            findMember.status = status;
         },
+        updateTotalMembers: (state, action) => {
+           state.totalMembers = action.payload
+        },
+        setSearchMembers: (state, action) => {
+           state.searchField = action.payload
+        }
     },
     extraReducers(builder) {
         builder
@@ -133,13 +156,13 @@ export const adminMembersSlice = createSlice({
                 state.status = 'failed';
             })
             .addCase(addNewMember.pending, (state, action) => {
-                state.selectedDoctorStatus = 'loading';
+                state.addMemberStatus = 'loading';
             })
             .addCase(addNewMember.fulfilled, (state, action) => {
-                state.selectedDoctorStatus = 'succeeded';
+                state.addMemberStatus = 'succeeded';
             })
             .addCase(addNewMember.rejected, (state, action) => {
-                state.selectedDoctorStatus = 'failed';
+                state.addMemberStatus = 'failed';
             })
             .addCase(deleteMember.pending, (state, action) => {
                 state.deleteStatus = 'loading';
@@ -167,6 +190,15 @@ export const adminMembersSlice = createSlice({
             })
             .addCase(deactivateMember.rejected, (state, action) => {
                 state.deactivateStatus = 'failed';
+            })
+            .addCase(editMember.pending, (state, action) => {
+                state.editMemberStatus = 'loading';
+            })
+            .addCase(editMember.fulfilled, (state, action) => {
+                state.editMemberStatus = 'succeeded';
+            })
+            .addCase(editMember.rejected, (state, action) => {
+                state.editMemberStatus = 'failed';
             });
     },
 });
@@ -174,19 +206,16 @@ export const adminMembersSlice = createSlice({
 export const {
     setMembers,
     setCount,
-    selectedMember,
-    closeSelectedMember,
     setSearchField,
-    setSpeciality,
-    setIsModalOpen,
-    setInviteList,
-    removeDoctor,
-    clearInviteList,
     setEditModal,
+    setEditMember,
     setActivateModal,
     setDeactivateModal,
     updateMembers,
     setStatus,
+    setIsModalOpen,
+    updateTotalMembers,
+    setSearchMembers,
 } = adminMembersSlice.actions;
 
 export default adminMembersSlice.reducer;

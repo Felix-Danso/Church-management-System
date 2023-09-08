@@ -38,7 +38,7 @@ const Pagination = (props) => {
                                 <button
                                     className={`${
                                         props.currentPage === pageNumber
-                                            ? 'bg-[#F9FAFB] text-white'
+                                            ? 'bg-[blue] text-white'
                                             : ''
                                     } relative z-10 inline-flex border-r border-gray_200 items-center px-4 py-2`}
                                     onClick={() => {

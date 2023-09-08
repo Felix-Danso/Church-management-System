@@ -1,58 +1,72 @@
-import React, { useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import Navbar from '../AdminComponent/NavBar'
 import Card from '../AdminComponent/Card'
-import AdminActions from '../AdminComponent/AdminActions'
+import Search from '../AdminComponent/Search'
 import TitleAndCtas from '../AdminComponent/TitleAndCtas'
-import TitleAndCtas1 from '../TitleAndCtas1'
 import members from '../Assets/members.svg';
 import Tithe from '../Assets/Tithe.svg'
-import Departments from '../Assets/Departments.svg'
+import department from '../Assets/department.svg'
 import { Route, Routes } from 'react-router'
 import Members from '../AdminComponent/Members'
-import { useSelector } from 'react-redux'
-
+import {useDispatch, useSelector} from 'react-redux'
+import {getDashboardStats} from "../Slices/DashboardSlice";
+import Departments from "./Department";
+import Tithes from "./Tithes";
 
 const Dashboard = () => {
-    // const dispatch = useDispatch()
-    // const count = useSelector((state) => state.totalChurchMember.count)
-    const total_members = useSelector((state) => state.cards.total_members)
-    const[status,] = useState()
+    const dispatch = useDispatch()
+    const status = useSelector((state) => state.dashboard.status)
+    const totalMembers = useSelector((state) => state.dashboard.totalMembers)
+    const totalDepartments = useSelector((state) => state.dashboard.totalDepartments)
+    const totalTithe = useSelector((state) => state.dashboard.totalTithe)
+
+    useEffect(() => {
+        dispatch(getDashboardStats())
+    }, []);
 
   return (
     <div>
       <Navbar/>
-      <AdminActions/>
-      <TitleAndCtas/>
-      <TitleAndCtas1/>
       <div className='grid grid-cols-1 gap-12 pt-8 ml-10 mr-10 md:grid-cols-2 lg:grid-cols-3'>
                 <Card
                     title='Members'
-                    number={status === 'loading' ? 'loading...': total_members}
+                    number={status === 'loading' ? 'loading...': totalMembers}
                     image={members}
                     color='bg-[#66B6FF33]'
                 />
                 <Card
                     title='Tithe'
-                    number={status === 'loading' ? 'loading...' : ""}
+                    number={status === 'loading' ? 'loading...' : totalTithe}
                     image={Tithe}
                     color='bg-[#FF8B6633]'
                 />
                 <Card
                     title='Departments'
-                    number={status === 'loading' ? 'loading...' : ""}
-                    image={Departments}
+                    number={status === 'loading' ? 'loading...' : totalDepartments}
+                    image={department}
                     color='bg-[#66FFED33]'
                 />
             </div>
             <Routes>
                 <Route
-                    path='/'
+                    path='/members'
                     element={
                         <Members/>
                     }
                 />
+                <Route
+                    path='/departments'
+                    element={
+                        <Departments/>
+                    }
+                />
+                <Route
+                    path='/tithes'
+                    element={
+                        <Tithes/>
+                    }
+                />
             </Routes>
-            {/* <Members/> */}
     </div>
   )
 }

@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import { alerts } from "../Utility/alerts";
-// import { AxiosPrivate } from "axios";
 
 const initialState = {
     status: 'idle',

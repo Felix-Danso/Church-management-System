@@ -4,18 +4,15 @@ import OutsideClickHandler from 'react-outside-click-wrapper';
 import { CircularProgress } from '@mui/material';
 import { createImageFromInitials } from '../../Utility/createImage';
 import { useDispatch, useSelector } from 'react-redux';
-import { signOut } from '../../features/userSlice';
+import {getRandomColor} from "../../Utility/getRamdomColor";
+import {signOut} from "../../Slices/userSlice";
 
 //profile drop menu component
-const Profile = (props) => {
+const Profile = () => {
     const dispatch = useDispatch();
-    
-    const user = useSelector((state) => state.authenticated.user)
-    // const user = JSON.parse(localStorage.getItem('user'))
-    const token = JSON.parse(localStorage.getItem('token'));
-    const status = useSelector((state) => state.authenticated.status);
-    const color = useSelector((state) => state.authenticated.color)
-
+    const user = useSelector((state) => state.login.user)
+    const token = useSelector((state) => state.login.tokens)
+    const status = useSelector((state) => state.login.signOutStatus)
     //state of profile menu
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
@@ -32,7 +29,7 @@ const Profile = (props) => {
                 >
                     <img
                         className='object-cover w-8 h-8 rounded-full'
-                        src={user?.profile_picture ? user?.profile_picture : createImageFromInitials(600, color)}
+                        src={user?.profile_picture ? user?.profile_picture : createImageFromInitials(600, getRandomColor())}
                         alt=''
                         aria-hidden='true'
                     />
@@ -42,12 +39,9 @@ const Profile = (props) => {
                         className='absolute right-0 w-56 mt-2 space-y-2 text-gray_600 bg-[white] border-[#F2F4F7] rounded-lg shadow-lg'
                         aria-label='submenu'
                     >
-                        {user?.role__name === 'Super Admin' ? (
-                            <></>
-                        ) : (
                             <li className='flex ml-3 border-b border-gray_200 text-gray_700'>
                                 <Link
-                                    to={props.to}
+                                    to={''}
                                     className='inline-flex items-center w-full px-2 py-1 text-sm transition-colors duration-150 rounded-md border-gray2'
                                 >
                                     <svg
@@ -65,7 +59,6 @@ const Profile = (props) => {
                                     <span>Account Settings</span>
                                 </Link>
                             </li>
-                        )}
                         <li className='flex ml-3 text-gray2'>
                             {status === 'loading' ? (
                                 <div className='inline-flex items-center w-full px-2 py-1 text-sm font-normal transition-colors duration-150 rounded-md animate-pulse text-gray_500'>

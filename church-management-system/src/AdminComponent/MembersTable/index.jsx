@@ -3,18 +3,21 @@ import { BsThreeDots} from 'react-icons/bs';
 import {GoPrimitiveDot} from 'react-icons/go';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomizedDialogs from '../ConfirmationModal';
-import 
-    { 
-     activateMember,
-     deactivateMember, 
-     deleteMember,
-      setActivateModal, 
-      setDeactivateModal, 
-      setEditModal 
-    }
- from '../Members/MembersSlice';
-// import { fetchAllMembers, fetchMember } from '../Members/MembersSlice';
-
+import
+{
+    activateMember,
+    deactivateMember,
+    deleteMember,
+    setActivateModal,
+    setDeactivateModal, setEditMember,
+    setEditModal
+}
+    from '../Members/MembersSlice';
+import {customStyles} from "../../Misc/modelStyle";
+import Modal from "react-modal";
+import EditMember from "./editMember";
+import {fetchAllDepartments} from "../../Slices/departmentSlice";
+import Loader from "../../Components/Loader";
 
 const MembersTable = (props) => { 
     const dispatch = useDispatch();
@@ -22,9 +25,11 @@ const MembersTable = (props) => {
     const editModal = useSelector((state) => state.adminMembers.editModal);
     const activateModal = useSelector((state) => state.adminMembers.activateModal);
     const deactivateModal = useSelector((state) => state.adminMembers.deactivateModal);
-    const editStatus = useSelector((state) => state.adminMembers.editStatus);
+    const editStatus = useSelector((state) => state.adminMembers.editMemberStatus);
     const activateStatus = useSelector((state) => state.adminMembers.activateStatus);
     const deactivateStatus = useSelector((state) => state.adminMembers.deactivateStatus);
+    const isEditModalOpen = useSelector((state) => state.adminMembers.isEditModalOpen);
+    const isLoading = useSelector((state) => state.adminMembers.status)
        //function to display sub menu of doctors
        const menuTrigger = (id) => {
         if (menuOpen === id) {
@@ -57,6 +62,11 @@ const MembersTable = (props) => {
             <div className='-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8'>
                 <div className='inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8'>
                     <div className='overflow-hidden border-b rounded-md shadow-md border-gray_200'>
+                        {isLoading === 'loading' ?
+                            <div className="h-20 flex justify-center items-center">
+                                <Loader/>
+                            </div>
+                            :
                         <table className='min-w-full overflow-x-scroll divide-y divide-gray-200'>
                             <thead className='bg-[#F9FAFB] border-b border-gray_200'>
                                 <tr>
@@ -79,7 +89,6 @@ const MembersTable = (props) => {
                                     return(
                                     <tr key={member.id} className='border-b border-gray_200'>
                                         <td
-                                            onClick={" "}
                                             className='px-6 py-4 cursor-pointer whitespace-nowrap'
                                         >
                                             <div className='flex items-center'>
@@ -157,7 +166,9 @@ const MembersTable = (props) => {
                                                     </li>
                                                     <li
                                                         onClick={() => {
-                                                            dispatch(setEditModal(member.id));
+                                                            dispatch(setEditMember(member))
+                                                            dispatch(fetchAllDepartments())
+                                                            dispatch(setEditModal());
                                                             setMenuOpen(false);
                                                         }}
                                                         className='flex ml-3 border-b cursor-pointer border-gray_200 text-gray_700'
@@ -210,12 +221,12 @@ const MembersTable = (props) => {
                                                     description={
                                                         <div
                                                             dangerouslySetInnerHTML={{
-                                                                __html: `<span>Activating <span class="font-bold">${member.full_name}</span> means they will be able to login.<br> Are you sure of this?</span>`,
+                                                                __html: `<span>Activating <span class="font-bold">${member.full_name}</span><br> Are you sure of this?</span>`,
                                                             }}
                                                         />
                                                     }
                                                     onClickAccept={() =>
-                                                        dispatch(activateMember(member.email))
+                                                        dispatch(activateMember(member.id))
                                                     }
                                                     onClickDecline={() =>
                                                         dispatch(setActivateModal(null))
@@ -240,12 +251,12 @@ const MembersTable = (props) => {
                                                     description={
                                                         <div
                                                             dangerouslySetInnerHTML={{
-                                                                __html: `<span>Deactivating <span class="font-bold">${member.full_name}</span> means they won't be able to login.<br> Are you sure of this?</span>`,
+                                                                __html: `<span>Deactivating <span class="font-bold">${member.full_name}</span><br> Are you sure of this?</span>`,
                                                             }}
                                                         />
                                                     }
                                                     onClickAccept={() =>
-                                                        dispatch(deactivateMember(member.email))
+                                                        dispatch(deactivateMember(member.id))
                                                     }
                                                     onClickDecline={() =>
                                                         dispatch(setDeactivateModal(null))
@@ -260,9 +271,23 @@ const MembersTable = (props) => {
                                 })}
                             </tbody>
                         </table>
+                        }
+                        {((props.members.length <= 0) && isLoading !== 'loading') &&
+                        <div className="h-20 flex items-center justify-center text-center">
+                            <span>No member founds</span>
+                        </div>
+                        }
                     </div>
                 </div>
             </div>
+            <Modal
+                isOpen={isEditModalOpen}
+                style={customStyles}
+                contentLabel="Example Modal"
+                ariaHideApp={false}
+                >
+                <EditMember/>
+            </Modal>
         </div>
 
   )
