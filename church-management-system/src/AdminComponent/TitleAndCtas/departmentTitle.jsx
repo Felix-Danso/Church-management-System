@@ -3,11 +3,11 @@ import Button from '../Button'
 import Modal from 'react-modal';
 import { customStyles } from '../../Misc/modelStyle';
 import { AiOutlineClose } from 'react-icons/ai';
-import {Input} from '../ModalInput';
+import {Input, SelectInput} from '../ModalInput';
 import ModalButton from '../ModalButton';
-import {setIsModalOpen} from '../Members/MembersSlice';
+import {fetchMembers, setIsModalOpen} from '../Members/MembersSlice';
 import {useDispatch, useSelector} from 'react-redux';
-import {capitalizeWords, isName, isValidPhoneNumber} from "../../Utility/formValidation";
+import {capitalizeWords, isEmpty, isName, isValidPhoneNumber} from "../../Utility/formValidation";
 import {addNewDepartment, fetchAllDepartments, setIsAddModalOpen} from "../../Slices/departmentSlice";
 import Loader from "../../Components/Loader";
 
@@ -29,6 +29,8 @@ const DepartmentTitle = (props) => {
     useSelector(state => state.departments.departmentOptions);
     const addDepartmentStatus = useSelector((state) => state.departments.isAdding)
     const isModalOpen = useSelector((state) => state.departments.isAddModalOpen)
+    const memberOptions = useSelector((state) => state.adminMembers.memberOptions)
+    const memberOptionsStatus = useSelector((state) => state.adminMembers.memberOptionsStatus)
 
     const checkErrors = () => {
         if(addDepartmentErrors.contact || addDepartmentErrors.name || addDepartmentErrors.leader
@@ -58,7 +60,7 @@ const DepartmentTitle = (props) => {
                 Church Departments
             </h1>
             <Button name="Add New Department" onClick={() => {
-                dispatch(fetchAllDepartments())
+                dispatch(fetchMembers())
                 dispatch(setIsAddModalOpen())} }/>
             <Modal
                 isOpen={isModalOpen}
@@ -88,12 +90,15 @@ const DepartmentTitle = (props) => {
                                }}
                                error={addDepartmentErrors.name}
                         />
-                        <Input label="Leader's Name" type="text" value={addDepartmentForm.leader}
-                               onChange={(event) => {
-                                   setAddDepartmentForm({...addDepartmentForm, leader: event.target.value})
-                                   setAddDepartmentErrors({...addDepartmentErrors, leader: isName(capitalizeWords(event.target.value))})
-                               }}
-                               error={addDepartmentErrors.leader}
+                        <SelectInput label="Select leader" value={addDepartmentForm.leader}
+                                     onChange={(event) => {
+                                         setAddDepartmentForm({...addDepartmentForm, leader: event.target.value})
+                                         setAddDepartmentErrors({...addDepartmentErrors, leader: isEmpty(event.target.value)})
+                                     }}
+                                     error={addDepartmentErrors.leader}
+                                     isLoading={memberOptionsStatus}
+                                     options={memberOptions}
+                                     placeholder={'Please select a leader'}
                         />
                         <Input label="Contact" type="text" value={addDepartmentForm.contact}
                                onChange={(event) => {

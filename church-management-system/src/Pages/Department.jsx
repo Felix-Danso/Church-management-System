@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import MembersTable from "../AdminComponent/MembersTable";
-import {fetchAllMembers, setSearchMembers} from "../AdminComponent/Members/MembersSlice";
-import {fetchAllDepartments} from "../Slices/departmentSlice";
+import {fetchAllDepartments, setSearchField} from "../Slices/departmentSlice";
 import DepartmentsTable from "../AdminComponent/departments";
 import DepartmentTitle from "../AdminComponent/TitleAndCtas/departmentTitle";
 import SearchInput from "../AdminComponent/SearchInput";
@@ -13,6 +11,7 @@ const Departments = () => {
     const departments = useSelector((state) => state.departments.departments)
     const status = useSelector((state) => state.departments.status);
     const searchField = useSelector((state) => state.departments.searchField)
+    const totalDepartments = useSelector((state) => state.departments.totalDepartments)
 
     // User is currently on this page
     const [currentPage, setCurrentPage] = useState(1);
@@ -21,13 +20,13 @@ const Departments = () => {
     const [recordsPerPage] = useState(5);
 
 
-    const nPages = Math.ceil(departments.length / recordsPerPage);
+    const nPages = totalDepartments
 
     const pageNumbers = [...Array(nPages + 1).keys()].slice(1);
 
     useEffect(() =>{
-        dispatch(fetchAllDepartments(searchField))
-    },[dispatch,currentPage])
+        dispatch(fetchAllDepartments({currentPage, search: searchField}))
+    },[dispatch,currentPage, searchField])
 
     return (
         <div>
@@ -36,11 +35,10 @@ const Departments = () => {
             </div>
             <div className='flex flex-col justify-between mt-8 ml-12 space-y-6 md:space-y-0 md:flex-row mr-9'>
                 <SearchInput
-                    placeholder='Search doctor by name or email'
+                    placeholder='Search departments'
                     value={searchField}
                     onChange={(event) => {
-                        dispatch(setSearchMembers(event.target.value))}
-
+                        dispatch(setSearchField(event.target.value))}
                     }
                 />
             </div>

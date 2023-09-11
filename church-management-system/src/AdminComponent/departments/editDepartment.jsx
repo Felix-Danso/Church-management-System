@@ -1,5 +1,5 @@
-import {Input} from "../ModalInput";
-import {capitalizeWords, isName, isValidPhoneNumber} from "../../Utility/formValidation";
+import {Input, SelectInput} from "../ModalInput";
+import {capitalizeWords, isEmpty, isName, isValidPhoneNumber} from "../../Utility/formValidation";
 import Loader from "../../Components/Loader";
 import ModalButton from "../ModalButton";
 import React, {useState} from "react";
@@ -23,6 +23,8 @@ const EditDepartment = () => {
     });
 
     const editStatus = useSelector((state) => state.departments.editStatus)
+    const memberOptions = useSelector((state) => state.adminMembers.memberOptions)
+    const memberOptionsStatus = useSelector((state) => state.adminMembers.memberOptionsStatus)
 
     const checkErrors = () => {
         if(editDepartmentErrors.contact || editDepartmentErrors.name || editDepartmentErrors.leader
@@ -53,12 +55,15 @@ const EditDepartment = () => {
                        }}
                        error={editDepartmentErrors.name}
                 />
-                <Input label="Leader's Name" type="text" value={editDepartmentForm.leader} capitalize={true}
-                       onChange={(event) => {
-                           setEditDepartmentForm({...editDepartmentForm, leader: capitalizeWords(event.target.value)})
-                           setEditDepartmentErrors({...editDepartmentErrors, leader: isName(capitalizeWords(event.target.value))})
-                       }}
-                       error={editDepartmentErrors.leader}
+                <SelectInput label="Select leader" value={editDepartmentForm.leader}
+                             onChange={(event) => {
+                                 setEditDepartmentForm({...editDepartmentForm, leader: event.target.value})
+                                 setEditDepartmentErrors({...editDepartmentErrors, leader: isEmpty(event.target.value)})
+                             }}
+                             error={editDepartmentErrors.leader}
+                             isLoading={memberOptionsStatus}
+                             options={memberOptions}
+                             placeholder={'Please select a leader'}
                 />
                 <Input label="Contact" type="text" value={editDepartmentForm.contact}
                        onChange={(event) => {
