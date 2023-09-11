@@ -3,6 +3,7 @@ import Login from './Pages/Login';
 import ForgotPassword from './Pages/ForgotPassword';
 import ResetPassword from './Pages/ResetPassword';
 import Dashboard from './Pages/Dashboard';
+import LandingPage from './Pages/LandingPage';
 import {ProtectAuthRoutes, ProtectRoutes} from "./Utility/proctectRoutes";
 
 function App() {
@@ -10,7 +11,8 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-            <Route path="/" element={<ProtectAuthRoutes><Login/></ProtectAuthRoutes>}/>
+        <Route path="/" element={<LandingPage/>}/>
+            <Route path="/login" element={<ProtectAuthRoutes><Login/></ProtectAuthRoutes>}/>
             <Route path="/forgotPassword" element={<ProtectAuthRoutes><ForgotPassword/></ProtectAuthRoutes>}/>
             <Route path="/reset-password/:token" element={<ProtectAuthRoutes><ResetPassword/></ProtectAuthRoutes>}/>
             <Route path="dashboard/*" element={<ProtectRoutes><Dashboard/></ProtectRoutes>}/>
