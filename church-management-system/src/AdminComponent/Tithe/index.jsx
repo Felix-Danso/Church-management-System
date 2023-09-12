@@ -71,7 +71,7 @@ const TithesTable = (props) => {
                                 <tbody className='divide-y divide-gray-200'>
                                 {props.tithes.map((tithe) => {
                                     return(
-                                        <tr key={tithe.id} className='border-b border-gray_200'>
+                                        <tr key={tithe.tithes__id} className='border-b border-gray_200'>
                                             <td
                                                 className='px-6 py-4 cursor-pointer whitespace-nowrap'
                                             >
@@ -85,36 +85,36 @@ const TithesTable = (props) => {
                                             </td>
                                             <td className='px-6 py-4 whitespace-nowrap'>
                                                 <div className='text-sm text-gray_500'>
-                                                    {tithe.amount}
+                                                    {tithe.tithes__amount}
                                                 </div>
                                             </td>
                                             <td className='px-6 py-4 text-sm text-gray_500 whitespace-nowrap'>
-                                                {tithe.paid_on_date}
+                                                {tithe.tithes__paid_on_date}
                                             </td>
-                                            <td className='px-6 py-4 whitespace-nowrap'>
-                                            <span
-                                                className={`inline-flex items-center gap-x-1 px-4 py-2 text-xs leading-5 ${
-                                                    tithe.frequency === 'One Time'
-                                                        ? 'text-[#B42318] bg-[#FEF3F2]'
-                                                        : 'text-[#027A48] bg-[#ECFDF3]'
-                                                } rounded-full`}
-                                            >
-                                                <span>
-                                                    <GoPrimitiveDot />
-                                                </span>
-                                                <span>
-                                                {tithe.frequency}
-                                                </span>
-                                            </span>
-                                            </td>
+                                            {/*<td className='px-6 py-4 whitespace-nowrap'>*/}
+                                            {/*<span*/}
+                                            {/*    className={`inline-flex items-center gap-x-1 px-4 py-2 text-xs leading-5 ${*/}
+                                            {/*        tithe.frequency === 'One Time'*/}
+                                            {/*            ? 'text-[#B42318] bg-[#FEF3F2]'*/}
+                                            {/*            : 'text-[#027A48] bg-[#ECFDF3]'*/}
+                                            {/*    } rounded-full`}*/}
+                                            {/*>*/}
+                                            {/*    <span>*/}
+                                            {/*        <GoPrimitiveDot />*/}
+                                            {/*    </span>*/}
+                                            {/*    <span>*/}
+                                            {/*    {tithe.frequency}*/}
+                                            {/*    </span>*/}
+                                            {/*</span>*/}
+                                            {/*</td>*/}
                                             <td className='px-6 py-4 text-sm text-gray-500 whitespace-nowrap'>
                                                 <div className='cursor-pointer'>
                                                     <BsThreeDots
                                                         color='#344054'
-                                                        onClick={() => menuTrigger(tithe.id)}
+                                                        onClick={() => menuTrigger(tithe.tithes__id)}
                                                     />
                                                 </div>
-                                                {menuOpen === tithe.id ? (
+                                                {menuOpen === tithe.tithes__id ? (
                                                     <ul
                                                         ref={wrapperRef}
                                                         className='z-[100] absolute w-40 -translate-x-40 space-y-2 text-gray_600 bg-[white] border-[#F2F4F7] rounded-lg shadow-lg'

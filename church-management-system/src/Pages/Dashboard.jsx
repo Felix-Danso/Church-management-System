@@ -36,7 +36,7 @@ const Dashboard = () => {
                 />
                 <Card
                     title='Tithe'
-                    number={status === 'loading' ? 'loading...' : totalTithe}
+                    number={status === 'loading' ? 'loading...' : `GH₵ ${totalTithe}`}
                     image={Tithe}
                     color='bg-[#FF8B6633]'
                 />

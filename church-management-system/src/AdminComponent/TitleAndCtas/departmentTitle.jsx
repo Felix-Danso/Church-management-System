@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import Button from '../Button'
 import Modal from 'react-modal';
 import { customStyles } from '../../Misc/modelStyle';
@@ -31,6 +31,19 @@ const DepartmentTitle = (props) => {
     const isModalOpen = useSelector((state) => state.departments.isAddModalOpen)
     const memberOptions = useSelector((state) => state.adminMembers.memberOptions)
     const memberOptionsStatus = useSelector((state) => state.adminMembers.memberOptionsStatus)
+
+    useEffect(() => {
+        setAddDepartmentForm({
+            name: '',
+            leader: '',
+            contact: '',
+        })
+        setAddDepartmentErrors({
+            name: '',
+            leader: '',
+            contact: '',
+        })
+    }, [isModalOpen]);
 
     const checkErrors = () => {
         if(addDepartmentErrors.contact || addDepartmentErrors.name || addDepartmentErrors.leader

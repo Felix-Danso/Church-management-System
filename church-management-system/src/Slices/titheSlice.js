@@ -18,14 +18,17 @@ const initialState = {
     editStatus: 'idle',
     isEditModalOpen: false,
     isLoadingMembers: false,
-    editTithe: null
+    editTithe: null,
+    searchField: '',
+    totalPages: 0
 };
 
 export const fetchAllTithes = createAsyncThunk('fetchAllDepartments', async (params, { dispatch }) => {
     try {
-        const response = await axiosPrivate.post(`dashboard/all-tithes/1/`, {search: params.search});
+        const response = await axiosPrivate.post(`dashboard/all-tithes/${params.currentPage}/`, {search_param: params.search});
         dispatch(setTithes(response.data.data))
         dispatch(setTotalPages(response.data.total_pages))
+        console.log(response)
     } catch (error) {
         alerts('error', error?.response.data.detail || error?.message);
     }
@@ -34,7 +37,7 @@ export const fetchAllTithes = createAsyncThunk('fetchAllDepartments', async (par
 export const addNewTithe = createAsyncThunk('addNewTithe', async (titheInfo, { dispatch }) => {
     try {
         const response = await axiosPrivate.post(`dashboard/add-member-tithes/`, titheInfo);
-        dispatch(fetchAllTithes())
+        dispatch(fetchAllTithes({search: '', currentPage: 1}))
         dispatch(setIsAddModalOpen())
         alerts('success', response.data.detail);
     } catch (error) {
@@ -89,7 +92,10 @@ export const tithesSlice = createSlice({
         },
         setEditTithe(state, action) {
             state.editTithe = action.payload
-        }
+        },
+        setSearchField: (state, action) => {
+            state.searchField = action.payload;
+        },
     },
     extraReducers(builder) {
         builder
@@ -135,7 +141,7 @@ export const tithesSlice = createSlice({
 
 export const {
     setMemberOptions, setTithes, setIsAddModalOpen, setDeleteModal
-    , setTotalPages, setEditModal, setEditTithe
+    , setTotalPages, setEditModal, setEditTithe, setSearchField
 } = tithesSlice.actions;
 
 export default tithesSlice.reducer;

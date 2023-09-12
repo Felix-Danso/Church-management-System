@@ -38,7 +38,6 @@ export const fetchMembers = createAsyncThunk('fetchAllMembers/admin', async (_,{
     try {
         const response = await axiosPrivate.get(`/dashboard/members/`);
         dispatch(setMemberOptions(response.data.data))
-
     } catch (error) {
         alerts('error', error?.response.data.detail || error?.message);
     }
@@ -58,7 +57,9 @@ export const editMember = createAsyncThunk('editMember/admin', async (memberInfo
     try {
         const response = await axiosPrivate.post(`/dashboard/edit-church-member/`, memberInfo);
         dispatch(setIsModalOpen())
-        dispatch(fetchAllMembers())
+        dispatch(fetchAllMembers({search: '', currentPage: 1}))
+        dispatch(setEditModal())
+        dispatch(setIsModalOpen())
         alerts('success', response.data.detail);
     } catch (error) {
         alerts('error', error?.response.data.detail || error?.message);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from '../Button'
 import Modal from 'react-modal';
 import { customStyles } from '../../Misc/modelStyle';
@@ -52,6 +52,21 @@ const TitleAndCtas = (props) => {
             dispatch(addNewMember(addMemberForm))
         }
     }
+
+    useEffect(() => {
+        setAddMemberForm({
+            full_name: '',
+            department_id: '',
+            contact: '',
+            is_paid: 'False'
+        })
+        setAddMemberErrors({
+            full_name: '',
+            department_id: '',
+            contact: '',
+            is_paid: 'False'
+        })
+    }, [isModalOpen]);
 
 
   return (
@@ -113,7 +128,7 @@ const TitleAndCtas = (props) => {
                     <Loader/>
                     :
                     <>
-                        <ModalButton type="submit" name="Cancel"/>
+                        <ModalButton type="button" onClick={() => dispatch(setIsModalOpen())} name="Cancel"/>
                         <ModalButton name="Save changes" color="#4044ED" text="white"/>
                     </>
                 }

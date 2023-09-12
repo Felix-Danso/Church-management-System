@@ -12,9 +12,9 @@ const EditMember = () => {
     const dispatch = useDispatch()
     const editMemberSelected = useSelector(state => state.adminMembers.editMember)
     const [editMemberForm, setEditMemberForm] = useState({
-        id: editMemberSelected.id,
+        church_member_id: editMemberSelected.id,
         full_name: editMemberSelected.full_name,
-        department_id: editMemberSelected.department__name,
+        department_id: editMemberSelected.department__id,
         contact: editMemberSelected.contact,
         is_paid: 'False'
     })
@@ -25,16 +25,16 @@ const EditMember = () => {
         contact: '',
     });
     const departmentsStatus = useSelector(state => state.departments.status)
-    const departmentsOptions = useSelector(state => state.departments.departmentsOptionsValues)
+    const departmentsOptions = useSelector(state => state.departments.departmentOptions)
     const editMemberStatus = useSelector((state) => state.adminMembers.editMemberStatus)
 
     const checkErrors = () => {
         if(editMemberErrors.contact || editMemberErrors.full_name || editMemberErrors.department
-            || !editMemberForm.full_name || !editMemberForm.department || !editMemberForm.contact
+            || !editMemberForm.full_name || !editMemberForm.department_id || !editMemberForm.contact
         ) {
             setEditMemberErrors({full_name: isName(editMemberForm.full_name),
                 contact: isValidPhoneNumber(editMemberForm.contact),
-                department: isEmpty(editMemberForm.department)
+                department: isEmpty(editMemberForm.department_id)
             })
             return true
         } else {
@@ -57,9 +57,9 @@ const EditMember = () => {
                            }}
                            error={editMemberErrors.full_name}
                     />
-                    <SelectInput label="Department" value={editMemberForm.department}
+                    <SelectInput label="Department" value={editMemberForm.department_id}
                                  onChange={(event) => {
-                                     setEditMemberForm({...editMemberForm, department: event.target.value})
+                                     setEditMemberForm({...editMemberForm, department_id: event.target.value})
                                      setEditMemberErrors({...editMemberErrors, department: isEmpty(event.target.value)})
                                  }}
                                  error={editMemberErrors.department}

@@ -16,7 +16,7 @@ import
 import {customStyles} from "../../Misc/modelStyle";
 import Modal from "react-modal";
 import EditMember from "./editMember";
-import {fetchAllDepartments} from "../../Slices/departmentSlice";
+import {fetchDepartments} from "../../Slices/departmentSlice";
 import Loader from "../../Components/Loader";
 
 const MembersTable = (props) => { 
@@ -167,7 +167,7 @@ const MembersTable = (props) => {
                                                     <li
                                                         onClick={() => {
                                                             dispatch(setEditMember(member))
-                                                            dispatch(fetchAllDepartments())
+                                                            dispatch(fetchDepartments())
                                                             dispatch(setEditModal());
                                                             setMenuOpen(false);
                                                         }}
