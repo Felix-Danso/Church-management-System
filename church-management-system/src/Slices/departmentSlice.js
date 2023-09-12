@@ -30,6 +30,17 @@ export const fetchAllDepartments = createAsyncThunk('fetchAllDepartments', async
     }
 });
 
+export const fetchDepartments = createAsyncThunk('fetchDepartments', async (_, { dispatch }) => {
+    try {
+        const response = await axiosPrivate.get(`dashboard/departments/`);
+        dispatch(setDepartments(response.data.data))
+        dispatch(setTotalDepartments(response.data.total_pages))
+        dispatch(setDepartmentOptions(response.data.data))
+    } catch (error) {
+        alerts('error', error?.response.data.detail || error?.message);
+    }
+});
+
 export const addNewDepartment = createAsyncThunk('addNewDepartment', async (departmentInfo, { dispatch }) => {
     try {
         const response = await axiosPrivate.post(`dashboard/add-departments/`, departmentInfo);
@@ -46,6 +57,7 @@ export const deleteDepartment = createAsyncThunk('deleteDepartment', async (id, 
         const response = await axiosPrivate.delete(`dashboard/delete-departments/${id}/`);
         dispatch(fetchAllDepartments())
         dispatch(setDeleteModal(null))
+        dispatch(fetchAllDepartments({currentPage: 1, search: ''}))
         alerts('success', response.data.detail);
     } catch (error) {
         alerts('error', error?.response.data.detail || error?.message);
