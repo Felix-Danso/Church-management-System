@@ -22,7 +22,7 @@ const Navbar = (props) => {
                         <div className='flex gap-x-4'>
                             <Profile />
                             <h5 className='grid items-center font-semibold text-white'>
-                                {user.username}
+                                {user?.username}
                             </h5>
                         </div>
 

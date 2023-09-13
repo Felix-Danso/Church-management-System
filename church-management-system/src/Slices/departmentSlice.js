@@ -4,6 +4,7 @@ import {axiosPrivate} from "../Utility/axios";
 
 const initialState = {
     departments: [],
+    totalDepartments: 0,
     department: null,
     departmentOptions: [],
     departmentsOptionsValues: [],
@@ -18,10 +19,11 @@ const initialState = {
     isEditModalOpen: false,
 };
 
-export const fetchAllDepartments = createAsyncThunk('fetchAllDepartments', async (search, { dispatch }) => {
+export const fetchAllDepartments = createAsyncThunk('fetchAllDepartments', async (params, { dispatch }) => {
     try {
-        const response = await axiosPrivate.post(`dashboard/all-departments/1/`, {search: search});
+        const response = await axiosPrivate.post(`dashboard/all-departments/${params.currentPage}/`, {search_param: params.search});
         dispatch(setDepartments(response.data.data))
+        dispatch(setTotalDepartments(response.data.total_pages))
         dispatch(setDepartmentOptions(response.data.data))
     } catch (error) {
         alerts('error', error?.response.data.detail || error?.message);
@@ -31,7 +33,7 @@ export const fetchAllDepartments = createAsyncThunk('fetchAllDepartments', async
 export const addNewDepartment = createAsyncThunk('addNewDepartment', async (departmentInfo, { dispatch }) => {
     try {
         const response = await axiosPrivate.post(`dashboard/add-departments/`, departmentInfo);
-        dispatch(fetchAllDepartments())
+        dispatch(fetchAllDepartments({currentPage: 1, search: ''}))
         dispatch(setIsAddModalOpen())
         alerts('success', response.data.detail);
     } catch (error) {
@@ -41,9 +43,9 @@ export const addNewDepartment = createAsyncThunk('addNewDepartment', async (depa
 
 export const deleteDepartment = createAsyncThunk('deleteDepartment', async (id, { dispatch }) => {
     try {
-        const response = await axiosPrivate.delete(`dashboard/delete-departments/`, {id});
+        const response = await axiosPrivate.delete(`dashboard/delete-departments/${id}/`);
         dispatch(fetchAllDepartments())
-        dispatch(setIsAddModalOpen())
+        dispatch(setDeleteModal(null))
         alerts('success', response.data.detail);
     } catch (error) {
         alerts('error', error?.response.data.detail || error?.message);
@@ -53,7 +55,7 @@ export const deleteDepartment = createAsyncThunk('deleteDepartment', async (id, 
 export const editDepartment = createAsyncThunk('editDepartment', async (departmentInfo, { dispatch }) => {
     try {
         const response = await axiosPrivate.post(`dashboard/edit-departments/`, departmentInfo);
-        dispatch(fetchAllDepartments())
+        dispatch(fetchAllDepartments({currentPage: 1, search: ''}))
         dispatch(setEditModal())
         alerts('success', response.data.detail);
     } catch (error) {
@@ -87,7 +89,13 @@ export const departmentsSlice = createSlice({
         },
         setEditModal(state, action) {
             state.isEditModalOpen = !state.isEditModalOpen
-        }
+        },
+        setTotalDepartments(state, action) {
+            state.totalDepartments = action.payload
+        },
+        setSearchField: (state, action) => {
+            state.searchField = action.payload;
+        },
     },
     extraReducers(builder) {
         builder
@@ -133,7 +141,7 @@ export const departmentsSlice = createSlice({
 
 export const {
     setDepartmentOptions, setDepartments, setIsAddModalOpen, setDeleteModal
-    , setEditDepartment, setEditModal
+    , setEditDepartment, setEditModal, setTotalDepartments, setSearchField
 } = departmentsSlice.actions;
 
 export default departmentsSlice.reducer;
