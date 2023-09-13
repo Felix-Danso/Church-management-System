@@ -10,7 +10,7 @@ const EditTithe = () => {
     const dispatch = useDispatch()
     const editTitheSelected = useSelector(state => state.tithes.editTithe)
     const [editTitheForm, setEditTitheForm] = useState({
-        id: editTitheSelected.id,
+        id: editTitheSelected.tithes__id,
         amount: editTitheSelected.amount,
     })
 

@@ -13,6 +13,7 @@ import {
 } from "../../Slices/departmentSlice";
 import Loader from "../../Components/Loader";
 import EditDepartment from "./editDepartment";
+import {fetchMembers} from "../Members/MembersSlice";
 
 const DepartmentsTable = (props) => {
     const dispatch = useDispatch();
@@ -135,6 +136,7 @@ const DepartmentsTable = (props) => {
                                                             onClick={() => {
                                                                 dispatch(setEditDepartment(department))
                                                                 dispatch(setEditModal());
+                                                                dispatch(fetchMembers())
                                                                 setMenuOpen(false);
                                                             }}
                                                             className='flex ml-3 border-b cursor-pointer border-gray_200 text-gray_700'

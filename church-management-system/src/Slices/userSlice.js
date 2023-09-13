@@ -30,8 +30,8 @@ export const login = createAsyncThunk(
 
 export const signOut = createAsyncThunk('logout/user', async (_, { dispatch }) => {
     try {
-        const refresh = initialState.tokens;
-        await axios.post('', { refresh });
+        const refresh = JSON.parse(localStorage.getItem('token'))?.refresh
+        await axios.post('auth/logout/', { refresh });
         dispatch(logout());
         window.location.reload();
         alerts('success', 'You have logged out successfully');
@@ -49,9 +49,9 @@ export const loginSlice = createSlice({
             state.tokens = action.payload.token
         },
         logout: (state) => {
-            localStorage.clear();
             state.user = null;
             state.tokens = null;
+            localStorage.clear();
         },
     },
     extraReducers(builder) {

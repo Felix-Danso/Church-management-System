@@ -11,7 +11,7 @@ import {signOut} from "../../Slices/userSlice";
 const Profile = () => {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.login.user)
-    const token = useSelector((state) => state.login.tokens)
+    const token = JSON.parse(localStorage.getItem('token'))?.refresh
     const status = useSelector((state) => state.login.signOutStatus)
     //state of profile menu
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);

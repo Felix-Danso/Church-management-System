@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {setSearchMembers} from "../AdminComponent/Members/MembersSlice";
 import SearchInput from "../AdminComponent/SearchInput";
 import TitheTitle from "../AdminComponent/TitleAndCtas/titheTitle";
-import {fetchAllTithes} from "../Slices/titheSlice";
+import {fetchAllTithes, setSearchField} from "../Slices/titheSlice";
 import TithesTable from "../AdminComponent/Tithe";
 import Pagination from "../AdminComponent/Pagination";
 
@@ -11,7 +11,7 @@ const Tithes = () => {
     const dispatch = useDispatch()
     const tithes = useSelector((state) => state.tithes.tithes)
     const status = useSelector((state) => state.tithes.status);
-    const searchField = useSelector((state) => state.departments.searchField)
+    const searchField = useSelector((state) => state.tithes.searchField)
 
     // User is currently on this page
     const [currentPage, setCurrentPage] = useState(1);
@@ -22,7 +22,7 @@ const Tithes = () => {
     const pageNumbers = [...Array(nPages + 1).keys()].slice(1);
 
     useEffect(() =>{
-        dispatch(fetchAllTithes(searchField))
+        dispatch(fetchAllTithes({search: searchField, currentPage: currentPage}))
     },[dispatch,currentPage])
 
     return (
@@ -35,17 +35,16 @@ const Tithes = () => {
                     placeholder='Search tithe'
                     value={searchField}
                     onChange={(event) => {
-                        dispatch(setSearchMembers(event.target.value))}
-
-                    }
+                        dispatch(setSearchField(event.target.value))
+                        dispatch(fetchAllTithes({search: searchField, currentPage: 1}))
+                    }}
                 />
             </div>
             <TithesTable
                 heads={[
                     'Member',
-                    'Amount',
+                    'Amount (GH₵)',
                     'Date Paid',
-                    'Frequency',
                 ]}
                 tithes={tithes}
             />

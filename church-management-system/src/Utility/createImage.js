@@ -1,7 +1,7 @@
 import { getInitials } from "./getInitials";
 
 export const createImageFromInitials = (size, color) => {
-    const name=getInitials(JSON.parse(localStorage.getItem('user')).username)
+    const name=getInitials(JSON.parse(localStorage.getItem('user'))?.username)
     const canvas=document.createElement('canvas')
     const context=canvas.getContext('2d')
     canvas.width=canvas.height=size

@@ -4,6 +4,8 @@ import { axiosPrivate } from '../../Utility/axios';
 
 const initialState = {
     members: [],
+    memberOptions: [],
+    memberOptionsStatus: 'idle',
     totalMembers: 0,
     status: 'idle',
     selectedMember: null,
@@ -32,11 +34,19 @@ export const fetchAllMembers = createAsyncThunk('fetchMembers/admin', async (par
     }
 });
 
+export const fetchMembers = createAsyncThunk('fetchAllMembers/admin', async (_,{ dispatch }) => {
+    try {
+        const response = await axiosPrivate.get(`/dashboard/members/`);
+        dispatch(setMemberOptions(response.data.data))
+    } catch (error) {
+        alerts('error', error?.response.data.detail || error?.message);
+    }
+});
 export const addNewMember = createAsyncThunk('addNewMember/admin', async (newMemberInfo, { dispatch }) => {
     try {
         const response = await axiosPrivate.post(`/dashboard/add-church-member/`, newMemberInfo);
+        dispatch(fetchAllMembers({search: '', currentPage: 1}))
         dispatch(setIsModalOpen())
-        dispatch(fetchAllMembers())
         alerts('success', response.data.detail);
     } catch (error) {
         alerts('error', error?.response.data.detail || error?.message);
@@ -47,7 +57,9 @@ export const editMember = createAsyncThunk('editMember/admin', async (memberInfo
     try {
         const response = await axiosPrivate.post(`/dashboard/edit-church-member/`, memberInfo);
         dispatch(setIsModalOpen())
-        dispatch(fetchAllMembers())
+        dispatch(fetchAllMembers({search: '', currentPage: 1}))
+        dispatch(setEditModal())
+        dispatch(setIsModalOpen())
         alerts('success', response.data.detail);
     } catch (error) {
         alerts('error', error?.response.data.detail || error?.message);
@@ -142,7 +154,12 @@ export const adminMembersSlice = createSlice({
         },
         setSearchMembers: (state, action) => {
            state.searchField = action.payload
-        }
+        },
+        setMemberOptions(state, action) {
+            state.memberOptions = action.payload.map(member => {
+                return {name: member.full_name, value: member.full_name}
+            })
+        },
     },
     extraReducers(builder) {
         builder
@@ -199,6 +216,15 @@ export const adminMembersSlice = createSlice({
             })
             .addCase(editMember.rejected, (state, action) => {
                 state.editMemberStatus = 'failed';
+            })
+            .addCase(fetchMembers.pending, (state, action) => {
+                state.memberOptionsStatus = 'loading';
+            })
+            .addCase(fetchMembers.fulfilled, (state, action) => {
+                state.memberOptionsStatus = 'succeeded';
+            })
+            .addCase(fetchMembers.rejected, (state, action) => {
+                state.memberOptionsStatus = 'failed';
             });
     },
 });
@@ -216,6 +242,7 @@ export const {
     setIsModalOpen,
     updateTotalMembers,
     setSearchMembers,
+    setMemberOptions
 } = adminMembersSlice.actions;
 
 export default adminMembersSlice.reducer;

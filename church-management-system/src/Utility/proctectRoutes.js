@@ -4,7 +4,7 @@ export const ProtectAuthRoutes = ({ children}) => {
     const isAuthenticated = localStorage.getItem('token')
 
     if(isAuthenticated) {
-        return <Navigate to='/dashboard' replace/>
+        return <Navigate to='/dashboard/members' replace/>
     }
 
     return children
