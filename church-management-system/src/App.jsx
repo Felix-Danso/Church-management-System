@@ -12,7 +12,7 @@ function App() {
       <Router>
         <Routes>
         <Route path="/" element={<LandingPage/>}/>
-            <Route path="/login" element={<ProtectAuthRoutes><Login/></ProtectAuthRoutes>}/>
+            <Route path="/login" element={<><Login/></>}/>
             <Route path="/forgotPassword" element={<ProtectAuthRoutes><ForgotPassword/></ProtectAuthRoutes>}/>
             <Route path="/reset-password/:token" element={<ProtectAuthRoutes><ResetPassword/></ProtectAuthRoutes>}/>
             <Route path="dashboard/*" element={<ProtectRoutes><Dashboard/></ProtectRoutes>}/>

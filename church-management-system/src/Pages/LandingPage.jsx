@@ -12,6 +12,7 @@ import children from '../Assets/children.jpg'
 import usher from '../Assets/usher.jpg'
 import tech from '../Assets/tech.jpg'
 import prayer from '../Assets/prayer.jpg'
+import AdminButtonRoute from "../AdminComponent/AdminButtonRoute";
 
 
 const theme = createTheme({
@@ -183,11 +184,10 @@ function App() {
                 >
                   Contacts
                 </Button>
-              </Box>
-              {/* <IconButton>
-                <DragHandleRounded fontSize="large" sx={{ color: '#000' }} />
-              </IconButton> */}
+              </Box>   
+              <AdminButtonRoute width='100px' name="Admin" to="/login"/>      
             </Toolbar>
+            
           </AppBar>
           <Toolbar></Toolbar>
           <Box ref={section1Ref} data-section="section1" mb={2} id="home" sx={{
@@ -456,8 +456,6 @@ function App() {
                     }
                   />
                 </Box>
-
-
 
                 <PayPalScriptProvider deferLoading={!openPaypal} options={{ "client-id": "test" }}>
                   {/* {
