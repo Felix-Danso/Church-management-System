@@ -17,5 +17,5 @@ export const ProtectRoutes = ({ children}) => {
         return children
     }
 
-    return  <Navigate to='/' replace/>
+    return  <Navigate to='/login' replace/>
 }
